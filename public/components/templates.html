@@ -1,0 +1,39 @@
+<!-- Cartão de médico: usado na home e na busca -->
+<template id="tpl-medico-card">
+  <article class="medico-card">
+    <div class="cab">
+      <div class="avatar" data-bind="iniciais" data-bind-attr="style:avatar_estilo" aria-hidden="true"></div>
+      <div>
+        <h3><a data-bind="nome" data-bind-attr="href:url_perfil"></a></h3>
+        <div class="esp-nome" data-bind="especialidade"></div>
+        <div class="crm" data-bind="crm_texto"></div>
+      </div>
+    </div>
+
+    <div class="meta">
+      <div><i class="fa-solid fa-location-dot"></i><span data-bind="local"></span></div>
+      <div><i class="fa-solid fa-hospital"></i><span data-bind="endereco"></span></div>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <span class="badge-mc" data-ref="badge"><i class="fa-solid" data-ref="badge-icone"></i><span data-bind="modalidade_rotulo"></span></span>
+        <span class="nota"><i class="fa-solid fa-star"></i><span data-bind="nota_texto"></span>
+          <span class="text-muted-mc fw-normal" data-bind="avaliacoes_texto"></span></span>
+      </div>
+    </div>
+
+    <div class="proximo">Próximo horário<b data-bind="proximo_texto"></b></div>
+
+    <div class="acoes">
+      <a class="btn btn-mc-outline" data-bind-attr="href:url_perfil">Ver perfil</a>
+      <a class="btn btn-mc" data-ref="agendar" data-bind-attr="href:url_agendar">Agendar</a>
+    </div>
+  </article>
+</template>
+
+<!-- Quadro de especialidade: usado na home -->
+<template id="tpl-esp">
+  <a class="esp" data-bind-attr="href:url">
+    <i data-bind-attr="class:icone_classe" aria-hidden="true"></i>
+    <b data-bind="nome"></b>
+    <small data-bind="contagem"></small>
+  </a>
+</template>
