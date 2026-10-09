@@ -2,23 +2,73 @@
   <nav class="navbar navbar-expand-xl" aria-label="Navegação principal">
     <div class="container">
       <div data-include="components/logo.html"></div>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
-              aria-controls="menuPrincipal" aria-expanded="false" aria-label="Abrir menu">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#menuPrincipal"
+        aria-controls="menuPrincipal"
+        aria-expanded="false"
+        aria-label="Abrir menu"
+      >
         <i class="fa-solid fa-bars"></i>
       </button>
       <div class="collapse navbar-collapse" id="menuPrincipal">
         <ul class="navbar-nav mx-xl-auto mb-0 mt-3 mt-xl-0">
-          <li class="nav-item"><a class="nav-link" data-nav="inicio" href="index.html">Início</a></li>
-          <li class="nav-item"><a class="nav-link" data-nav="medicos" href="medicos.html">Encontrar Médico</a></li>
-          <li class="nav-item"><a class="nav-link" data-nav="especialidades" href="especialidades.html">Especialidades</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#como-funciona">Como Funciona</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#sobre">Sobre Nós</a></li>
-          <li class="nav-item"><a class="nav-link" href="index.html#contato">Contato</a></li>
+          <li class="nav-item">
+            <a class="nav-link" data-nav="inicio" href="index.html">Início</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-nav="medicos" href="pages/medicos.php"
+              >Encontrar Médico</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              data-nav="especialidades"
+              href="pages/especialidades.php"
+              >Especialidades</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#como-funciona"
+              >Como Funciona</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#sobre">Sobre Nós</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#contato">Contato</a>
+          </li>
         </ul>
         <div class="acoes">
-          <a class="btn btn-ghost" href="login.html">Entrar</a>
-          <a class="btn btn-mc-outline" href="cadastro.html">Criar conta</a>
-          <a class="btn btn-mc" href="agendamento.html"><i class="fa-regular fa-calendar-check me-1"></i>Agendar consulta</a>
+          <div class="user-menu dropdown">
+            <button
+              class="btn user-menu-trigger"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              aria-label="Menu do usuário"
+            >
+              <i class="fa-solid fa-user"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end user-menu-list">
+              <li>
+                <a class="dropdown-item" href="pages/login.php">Entrar</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="pages/cadastro.php"
+                  >Criar conta</a
+                >
+              </li>
+            </ul>
+          </div>
+          <a class="btn btn-mc" href="pages/agendamento.php"
+            ><i class="fa-regular fa-calendar-check me-1"></i>Agendar
+            consulta</a
+          >
         </div>
       </div>
     </div>

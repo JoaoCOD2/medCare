@@ -1,77 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Minhas consultas | MedCare</title>
-  <meta name="description" content="Encontre médicos por especialidade, veja horários disponíveis e agende sua consulta de forma rápida e segura.">
-  <meta name="theme-color" content="#15915F">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='13' fill='%2315915F'/%3E%3Cpath d='M17 9h6a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2v-4h-4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h4v-4a2 2 0 0 1 2-2Z' fill='%23fff'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
-  <link href="assets/css/style.css" rel="stylesheet">
-</head>
-<body data-pagina="consultas">
-<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Minhas consultas | MedCare</title>
+    <meta
+      name="description"
+      content="Encontre médicos por especialidade, veja horários disponíveis e agende sua consulta de forma rápida e segura."
+    />
+    <meta name="theme-color" content="#15915F" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='13' fill='%2315915F'/%3E%3Cpath d='M17 9h6a2 2 0 0 1 2 2v4h4a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-4v4a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2v-4h-4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h4v-4a2 2 0 0 1 2-2Z' fill='%23fff'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="assets/css/style.css" rel="stylesheet" />
+  </head>
+  <body data-pagina="consultas">
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-<div data-include="components/header.html"></div>
+    <div data-include="components/header.html"></div>
 
-<main id="conteudo">
-<section class="pagina-topo">
-  <div class="container">
-    <h1>Minhas consultas</h1>
-    <p class="text-muted-mc mb-0">Acompanhe e gerencie seus atendimentos.</p>
-  </div>
-</section>
-<section class="secao pt-4">
-  <div class="container" style="max-width: 920px;">
-    <div class="d-grid gap-3" id="lista-consultas"></div>
-    <div class="vazio" id="vazio" hidden>
-      <i class="fa-regular fa-calendar-plus" aria-hidden="true"></i>
-      <h2 class="h4">Você ainda não tem consultas</h2>
-      <p>Encontre um médico e escolha o melhor horário.</p>
-      <a class="btn btn-mc" href="medicos.html">Encontrar médico</a>
-    </div>
-  </div>
-</section>
+    <main id="conteudo">
+      <section class="pagina-topo">
+        <div class="container">
+          <h1>Minhas consultas</h1>
+          <p class="text-muted-mc mb-0">
+            Acompanhe e gerencie seus atendimentos.
+          </p>
+        </div>
+      </section>
+      <section class="secao pt-4">
+        <div class="container" style="max-width: 920px">
+          <div class="d-grid gap-3" id="lista-consultas"></div>
+          <div class="vazio" id="vazio" hidden>
+            <i class="fa-regular fa-calendar-plus" aria-hidden="true"></i>
+            <h2 class="h4">Você ainda não tem consultas</h2>
+            <p>Encontre um médico e escolha o melhor horário.</p>
+            <a class="btn btn-mc" href="pages/medicos.php">Encontrar médico</a>
+          </div>
+        </div>
+      </section>
 
-<!-- Modelo de uma consulta (clonado por consultas.js) -->
-<template id="tpl-consulta">
-  <article class="bloco mb-0 d-flex flex-wrap gap-3 align-items-center justify-content-between">
-    <div class="d-flex gap-3 align-items-center">
-      <div class="avatar" data-bind="iniciais" data-bind-attr="style:avatar_estilo" aria-hidden="true"></div>
-      <div>
-        <h2 class="h5 mb-0"><span data-bind="medico_nome"></span> <small class="text-muted-mc fw-normal">· <span data-bind="especialidade"></span></small></h2>
-        <div class="text-muted-mc small" data-bind="detalhes"></div>
+      <!-- Modelo de uma consulta (clonado por consultas.js) -->
+      <template id="tpl-consulta">
+        <article
+          class="bloco mb-0 d-flex flex-wrap gap-3 align-items-center justify-content-between"
+        >
+          <div class="d-flex gap-3 align-items-center">
+            <div
+              class="avatar"
+              data-bind="iniciais"
+              data-bind-attr="style:avatar_estilo"
+              aria-hidden="true"
+            ></div>
+            <div>
+              <h2 class="h5 mb-0">
+                <span data-bind="medico_nome"></span>
+                <small class="text-muted-mc fw-normal"
+                  >· <span data-bind="especialidade"></span
+                ></small>
+              </h2>
+              <div class="text-muted-mc small" data-bind="detalhes"></div>
+            </div>
+          </div>
+          <div class="d-flex gap-2 align-items-center flex-wrap">
+            <span
+              class="badge-status"
+              data-ref="status"
+              data-bind="status_rotulo"
+            ></span>
+            <a
+              class="btn btn-mc-outline btn-sm"
+              data-bind-attr="href:url_perfil"
+              >Ver detalhes</a
+            >
+            <button
+              class="btn btn-sm btn-ghost text-danger"
+              type="button"
+              data-ref="cancelar"
+            >
+              Cancelar consulta
+            </button>
+          </div>
+        </article>
+      </template>
+    </main>
+    <div
+      class="modal fade"
+      id="modalCancelar"
+      tabindex="-1"
+      aria-labelledby="modalCancelarTitulo"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: var(--r-lg)">
+          <div class="modal-header border-0">
+            <h2 class="modal-title h4" id="modalCancelarTitulo">
+              Cancelar consulta?
+            </h2>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Fechar"
+            ></button>
+          </div>
+          <div class="modal-body pt-0">
+            O horário voltará a ficar disponível na agenda do médico. Esta ação
+            não pode ser desfeita.
+          </div>
+          <div class="modal-footer border-0">
+            <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">
+              Manter consulta
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger rounded-pill"
+              id="btn-cancelar-final"
+            >
+              Cancelar consulta
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="d-flex gap-2 align-items-center flex-wrap">
-      <span class="badge-status" data-ref="status" data-bind="status_rotulo"></span>
-      <a class="btn btn-mc-outline btn-sm" data-bind-attr="href:url_perfil">Ver detalhes</a>
-      <button class="btn btn-sm btn-ghost text-danger" type="button" data-ref="cancelar">Cancelar consulta</button>
-    </div>
-  </article>
-</template>
-</main>
-<div class="modal fade" id="modalCancelar" tabindex="-1" aria-labelledby="modalCancelarTitulo" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered"><div class="modal-content" style="border-radius: var(--r-lg);">
-    <div class="modal-header border-0"><h2 class="modal-title h4" id="modalCancelarTitulo">Cancelar consulta?</h2>
-      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button></div>
-    <div class="modal-body pt-0">O horário voltará a ficar disponível na agenda do médico. Esta ação não pode ser desfeita.</div>
-    <div class="modal-footer border-0">
-      <button type="button" class="btn btn-ghost" data-bs-dismiss="modal">Manter consulta</button>
-      <button type="button" class="btn btn-danger rounded-pill" id="btn-cancelar-final">Cancelar consulta</button>
-    </div>
-  </div></div>
-</div>
-<div data-include="components/footer.html"></div>
-<div data-include="components/templates.html"></div>
+    <div data-include="components/footer.html"></div>
+    <div data-include="components/templates.html"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/js/core.js"></script>
-<script src="assets/js/consultas.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/core.js"></script>
+    <script src="assets/js/consultas.js"></script>
+  </body>
 </html>

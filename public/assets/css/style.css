@@ -49,7 +49,7 @@ a { color: var(--mc-green-600); text-decoration-thickness: 1px; text-underline-o
 .btn-mc:hover, .btn-mc:focus { background: var(--mc-green-600); border-color: var(--mc-green-600); color: #fff; box-shadow: 0 6px 18px rgba(21, 145, 95, .3); }
 .btn-mc-outline { background: transparent; border: 1.5px solid var(--mc-green); color: var(--mc-green-600); }
 .btn-mc-outline:hover { background: var(--mc-mint); color: var(--mc-green-800); border-color: var(--mc-green); }
-.btn-ghost { background: transparent; color: var(--mc-ink); border: 0; }
+.btn-ghost { background: transparent; color: var(--mc-ink); border: 1.5px solid transparent; }
 .btn-ghost:hover { background: var(--mc-mint); color: var(--mc-green-800); }
 .btn-claro { background: #fff; color: var(--mc-green-800); border-color: #fff; }
 .btn-claro:hover { background: var(--mc-mint); color: var(--mc-green-900); }
@@ -60,6 +60,10 @@ a { color: var(--mc-green-600); text-decoration-thickness: 1px; text-underline-o
 /* ---------- Header ---------- */
 .mc-header { position: sticky; top: 0; z-index: 1030; background: rgba(255, 255, 255, .94); backdrop-filter: blur(10px); border-bottom: 1px solid var(--mc-line); }
 .mc-header .navbar { padding: .7rem 0; }
+.mc-header .navbar > .container { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; }
+.mc-header .navbar-collapse { display: flex !important; align-items: center; justify-content: space-between; flex: 1; }
+.mc-header .navbar-nav { display: flex; align-items: center; justify-content: center; gap: .15rem; flex-wrap: nowrap; margin: 0 auto; }
+.mc-header .nav-item { white-space: nowrap; }
 .mc-logo { display: inline-flex; align-items: center; gap: .55rem; font-weight: 800; font-size: 1.45rem; letter-spacing: -.03em; color: var(--mc-green-900); text-decoration: none; }
 .mc-logo svg { width: 34px; height: 34px; flex: none; }
 .mc-logo:hover { color: var(--mc-green-900); }
@@ -67,11 +71,65 @@ a { color: var(--mc-green-600); text-decoration-thickness: 1px; text-underline-o
 .mc-header .nav-link:hover, .mc-header .nav-link.active { background: var(--mc-mint); color: var(--mc-green-800); }
 .navbar-toggler { border: 1.5px solid var(--mc-line); border-radius: var(--r-sm); padding: .4rem .6rem; }
 .navbar-toggler:focus { box-shadow: none; outline: 3px solid var(--mc-teal); }
-.mc-header .acoes { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.mc-header .acoes { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-left: auto; }
+.mc-header .acoes .btn { min-height: 46px; }
+.user-menu { position: relative; }
+.user-menu-trigger {
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(21, 145, 95, .7);
+  color: var(--mc-green-800);
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(21, 145, 95, .05);
+}
+.user-menu-trigger:hover,
+.user-menu-trigger:focus,
+.user-menu-trigger.show {
+  background: var(--mc-mint);
+  border-color: var(--mc-green);
+  color: var(--mc-green-900);
+}
+.user-menu-list {
+  min-width: 190px;
+  border-radius: 16px;
+  border: 1px solid var(--mc-line);
+  box-shadow: var(--sombra-1);
+  padding: .4rem;
+  margin-top: .6rem;
+}
+.user-menu-list .dropdown-item {
+  border-radius: 10px;
+  font-weight: 600;
+  color: var(--mc-ink);
+  padding: .7rem .9rem;
+}
+.user-menu-list .dropdown-item:hover,
+.user-menu-list .dropdown-item:focus {
+  background: var(--mc-mint);
+  color: var(--mc-green-900);
+}
+.mc-header .acoes .btn-mc {
+  background: linear-gradient(180deg, var(--mc-green) 0%, var(--mc-green-600) 100%);
+  border-color: var(--mc-green);
+  padding-inline: 1.25rem;
+  box-shadow: 0 8px 18px rgba(19, 128, 91, .18);
+}
+.mc-header .acoes .btn-mc:hover {
+  transform: translateY(-1px);
+}
 @media (max-width: 991.98px) {
+  .mc-header .navbar-collapse { display: none !important; }
+  .mc-header .navbar-collapse.show { display: flex !important; }
+  .mc-header .navbar-nav { flex-wrap: wrap; justify-content: flex-start; margin: 0; }
   .mc-header .navbar-collapse { padding: 1rem 0 .5rem; }
   .mc-header .acoes { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--mc-line); }
   .mc-header .acoes .btn { flex: 1 1 auto; text-align: center; }
+  .user-menu { margin-left: auto; }
 }
 
 /* ---------- Hero ---------- */

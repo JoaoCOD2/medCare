@@ -9,7 +9,7 @@ MC.pronto.then(function () {
     var grade = MC.$('#grade-esp');
     r.especialidades.forEach(function (e) {
       grade.appendChild(MC.preencher(MC.modelo('tpl-esp'), {
-        url: 'medicos.html?especialidade=' + e.id,
+        url: 'pages/medicos.php?especialidade=' + e.id,
         icone_classe: 'fa-solid ' + e.icone,
         nome: e.nome,
         contagem: e.total_medicos + (e.total_medicos === 1 ? ' profissional' : ' profissionais')
@@ -53,7 +53,7 @@ MC.pronto.then(function () {
           if (s.status !== 'disponivel') { ch.appendChild(MC.el('span', { class: 'slot ocupado', text: s.hora, 'aria-label': 'Horário ocupado' })); return; }
           ch.appendChild(MC.el('a', {
             class: 'slot' + (primeiro ? ' destaque' : ''), text: s.hora,
-            href: 'agendamento.html?medico_id=' + m.id + '&horario=' + encodeURIComponent(s.id)
+            href: 'pages/agendamento.php?medico_id=' + m.id + '&horario=' + encodeURIComponent(s.id)
           }));
           primeiro = false;
         });

@@ -128,7 +128,7 @@
       modalidade_rotulo: MC.fmt.modalidade(m.modalidade),
       nota_texto: MC.fmt.nota(m.nota), avaliacoes_texto: '(' + m.total_avaliacoes + ')',
       proximo_texto: prox ? MC.fmt.horario(prox) : 'Sem horários nos próximos 30 dias',
-      url_agendar: 'agendamento.html?medico_id=' + m.id + (prox ? '&horario=' + encodeURIComponent(prox.id) : '')
+      url_agendar: 'pages/agendamento.php?medico_id=' + m.id + (prox ? '&horario=' + encodeURIComponent(prox.id) : '')
     });
     var presencial = m.modalidade === 'presencial';
     MC.$('[data-ref=badge]', no).classList.toggle('teal', !presencial);

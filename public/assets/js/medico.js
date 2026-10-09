@@ -53,7 +53,7 @@ MC.pronto.then(function () {
         MC.el('small', { class: 'text-muted-mc', text: MC.fmt.dataBr(a.data) })
       ]));
     });
-    MC.$('#p-agendar').href = 'agendamento.html?medico_id=' + m.id;
+    MC.$('#p-agendar').href = 'pages/agendamento.php?medico_id=' + m.id;
   }
 
   function desenharDias(dias) {
@@ -84,7 +84,7 @@ MC.pronto.then(function () {
       var g = MC.limpar(MC.$('#h-horas'));
       r.slots.forEach(function (s) {
         if (s.status === 'disponivel') {
-          g.appendChild(MC.el('a', { class: 'slot', text: s.hora, href: 'agendamento.html?medico_id=' + medico.id + '&horario=' + encodeURIComponent(s.id) }));
+          g.appendChild(MC.el('a', { class: 'slot', text: s.hora, href: 'pages/agendamento.php?medico_id=' + medico.id + '&horario=' + encodeURIComponent(s.id) }));
         } else {
           g.appendChild(MC.el('span', { class: 'slot ocupado', text: s.hora, 'aria-label': s.hora + ' ocupado' }));
         }

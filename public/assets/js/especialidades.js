@@ -5,7 +5,7 @@ MC.pronto.then(function () {
   MC.api.get('api/filtros.php').then(function (r) {
     r.especialidades.forEach(function (e) {
       var col = MC.el('div', { class: 'col-sm-6 col-lg-4' });
-      var a = MC.el('a', { class: 'servico h-100', href: 'medicos.html?especialidade=' + e.id }, [
+      var a = MC.el('a', { class: 'servico h-100', href: 'pages/medicos.php?especialidade=' + e.id }, [
         MC.el('span', { class: 'icone' }, [MC.el('i', { class: 'fa-solid ' + e.icone, 'aria-hidden': 'true' })]),
         MC.el('h3', { text: e.nome }),
         MC.el('p', { text: e.descricao }),
