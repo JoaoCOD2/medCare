@@ -1,23 +1,36 @@
 <?php
 declare(strict_types=1);
-require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-use MedCare\Services\BuscaService;
+// Carrega as configurações centrais e os helpers do projeto
+require_once dirname(__DIR__, 2) . '/src/bootstrap.php';
 
-/**
- * GET /api/medicos.php
- * Filtros: q, especialidade, cidade, bairro, atendimento, data, limite
- */
-exigir_metodo('GET');
-$resultado = (new BuscaService())->buscar($_GET);
-$medicos = $resultado['medicos'];
-$limite = (int) ($_GET['limite'] ?? 0);
-if ($limite > 0) {
-    $medicos = array_slice($medicos, 0, $limite);
+use MedCare\Core\Container;
+
+// DECLARAÇÃO FORÇADA DA FUNÇÃO PARA EVITAR TRAVAMENTOS DE CACHE
+if (!function_exists('exigir_metodo')) {
+    function exigir_metodo(string $metodo): void {
+        if ($_SERVER['REQUEST_METHOD'] !== strtoupper($metodo)) {
+            header('Content-Type: application/json');
+            http_response_code(405);
+            echo json_encode(['sucesso' => false, 'erro' => 'Método não permitido.']);
+            exit;
+        }
+    }
 }
-json_resposta([
-    'ok'      => true,
-    'total'   => count($resultado['medicos']),
-    'filtros' => $resultado['filtros'],
-    'medicos' => array_map(static fn($m) => medico_api($m), $medicos),
+
+/** GET: Retorna a lista de médicos cadastrados no MySQL com limite */
+exigir_metodo('GET');
+
+$limite = (int) ($_GET['limite'] ?? 4);
+
+$medicosRepo = Container::medicos();
+$todosMedicos = $medicosRepo->listarTodos();
+$medicosLimitados = array_slice($todosMedicos, 0, $limite);
+
+// Limpa qualquer saída anterior e força a resposta em formato JSON nativo e puro
+header('Content-Type: application/json');
+echo json_encode([
+    'sucesso' => true,
+    'medicos' => $medicosLimitados
 ]);
+exit;

@@ -15,18 +15,9 @@
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..800&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
     <link href="assets/css/style.css" rel="stylesheet" />
   </head>
   <body data-pagina="inicio">
@@ -34,96 +25,71 @@
 
     <div data-include="components/header.html"></div>
 
-    <main id="conteudo">
+    <main id="conteudo" tabindex="-1">
       <!-- HERO -->
       <section class="hero" aria-labelledby="hero-titulo">
         <div class="container">
           <div class="row align-items-center g-5">
             <div class="col-lg-7 col-xl-8">
               <h1 id="hero-titulo">Encontre o médico ideal para você</h1>
-              <p class="lead">
-                Agende sua consulta de forma rápida, segura e sem complicação.
-              </p>
+              <p class="lead">Agende sua consulta de forma rápida, segura e sem complicação.</p>
 
-              <form
-                class="busca-hero"
-                action="pages/medicos.php"
-                method="get"
-                role="search"
-              >
+              <form class="busca-hero" action="pages/medicos.php" method="get" role="search">
                 <div class="campo">
-                  <label for="h-q"
-                    ><i class="fa-solid fa-magnifying-glass"></i>Especialidade
-                    ou médico</label
-                  >
-                  <input
-                    id="h-q"
-                    name="q"
-                    type="text"
-                    placeholder="Ex.: Cardiologia"
-                    autocomplete="off"
-                  />
+                  <label for="h-q"><i class="fa-solid fa-magnifying-glass"></i>Especialidade ou médico</label>
+                  <input id="h-q" name="q" type="text" placeholder="Ex.: Cardiologia" autocomplete="off" />
                 </div>
                 <div class="campo">
-                  <label for="h-cidade"
-                    ><i class="fa-solid fa-location-dot"></i>Cidade</label
-                  >
-                  <input
-                    id="h-cidade"
-                    name="cidade"
-                    type="text"
-                    list="lista-cidades"
-                    placeholder="Porto Alegre"
-                  />
-                  <datalist id="lista-cidades"></datalist>
+                  <label for="h-cidade"><i class="fa-solid fa-location-dot"></i>Cidade</label>
+                  <input id="h-cidade" name="cidade" type="text" list="lista-cidades" placeholder="Ex.: Porto Alegre" />
+                  <datalist id="lista-cidades">
+                    <option value="Porto Alegre"></option>
+                    <option value="Canoas"></option>
+                    <option value="Sapucaia do Sul"></option>
+                    <option value="São Leopoldo"></option>
+                  </datalist>
                 </div>
                 <div class="campo">
-                  <label for="h-data"
-                    ><i class="fa-regular fa-calendar"></i>Data</label
-                  >
+                  <label for="h-data"><i class="fa-regular fa-calendar"></i>Data</label>
                   <input id="h-data" name="data" type="date" />
                 </div>
                 <button class="btn btn-mc" type="submit">Buscar médicos</button>
               </form>
 
               <div class="hero-confianca">
-                <span
-                  ><i class="fa-solid fa-shield-heart"></i>Dados
-                  protegidos</span
-                >
-                <span
-                  ><i class="fa-solid fa-bolt"></i>Confirmação imediata</span
-                >
-                <span
-                  ><i class="fa-solid fa-video"></i>Presencial ou online</span
-                >
+                <span><i class="fa-solid fa-shield-heart"></i>Dados protegidos</span>
+                <span><i class="fa-solid fa-bolt"></i>Confirmação imediata</span>
+                <span><i class="fa-solid fa-video"></i>Presencial ou online</span>
               </div>
             </div>
 
-            <!-- Cartão "agenda ao vivo": preenchido por assets/js/home.js -->
-            <div class="col-lg-5 col-xl-4" id="coluna-agenda" hidden>
-              <div
-                class="agenda-viva"
-                aria-label="Exemplo de agenda disponível"
-              >
+            <!-- Cartão de agenda (exemplo estático) -->
+            <div class="col-lg-5 col-xl-4" id="coluna-agenda">
+              <div class="agenda-viva" aria-label="Exemplo de agenda disponível">
                 <div class="topo">
-                  <div class="avatar" id="av-avatar" aria-hidden="true"></div>
+                  <div class="avatar" style="background: #15915F" aria-hidden="true">CA</div>
                   <div>
-                    <div class="nome" id="av-nome"></div>
+                    <div class="nome">Dr. Carlos Almeida</div>
                     <div class="espec">
-                      <span id="av-esp"></span> ·
-                      <span class="nota"
-                        ><i class="fa-solid fa-star"></i
-                        ><span id="av-nota"></span
-                      ></span>
+                      <span>Cardiologia</span> ·
+                      <span class="nota"><i class="fa-solid fa-star"></i>4,9</span>
                     </div>
                   </div>
                 </div>
-                <div class="dias" id="av-dias"></div>
-                <div class="horas" id="av-horas"></div>
+                <div class="dias">
+                  <div class="dia-chip ativo">Ter <b>13</b></div>
+                  <div class="dia-chip">Qua <b>14</b></div>
+                  <div class="dia-chip">Qui <b>15</b></div>
+                  <div class="dia-chip">Sex <b>16</b></div>
+                  <div class="dia-chip">Seg <b>19</b></div>
+                </div>
+                <div class="horas">
+                  <a class="slot destaque" href="pages/agendamento.php">09:00</a>
+                  <a class="slot" href="pages/agendamento.php">10:30</a>
+                  <a class="slot" href="pages/agendamento.php">14:00</a>
+                </div>
                 <div class="selo">
-                  <i class="fa-solid fa-circle-check"></i>Horários atualizados
-                  em tempo real
+                  <i class="fa-solid fa-circle-check"></i>Horários atualizados em tempo real
                 </div>
               </div>
             </div>
@@ -136,24 +102,17 @@
         <div class="container">
           <div class="secao-titulo">
             <h2 id="servicos-titulo">Cuide da sua saúde em poucos passos</h2>
-            <p>
-              Tudo o que você precisa para encontrar, agendar e acompanhar seu
-              atendimento.
-            </p>
+            <p>Tudo o que você precisa para encontrar, agendar e acompanhar seu atendimento.</p>
           </div>
           <div class="grade-servicos">
             <a class="servico grande escuro" href="pages/medicos.php">
               <span class="icone"><i class="fa-solid fa-user-doctor"></i></span>
               <h3>Encontrar Médico</h3>
-              <p>
-                Encontre profissionais por nome, especialidade ou localização.
-              </p>
+              <p>Encontre profissionais por nome, especialidade ou localização.</p>
               <span class="mais">Buscar médicos</span>
             </a>
             <a class="servico grande teal" href="pages/agendamento.php">
-              <span class="icone"
-                ><i class="fa-regular fa-calendar-check"></i
-              ></span>
+              <span class="icone"><i class="fa-regular fa-calendar-check"></i></span>
               <h3>Agendar Consulta</h3>
               <p>Escolha o melhor dia e horário para seu atendimento.</p>
               <span class="mais">Agendar agora</span>
@@ -171,14 +130,9 @@
               <span class="mais">Abrir agenda</span>
             </a>
             <a class="servico" href="#faq">
-              <span class="icone"
-                ><i class="fa-regular fa-file-lines"></i
-              ></span>
+              <span class="icone"><i class="fa-regular fa-file-lines"></i></span>
               <h3>Resultados e Documentos</h3>
-              <p>
-                Área preparada para futuramente disponibilizar documentos
-                médicos.
-              </p>
+              <p>Área preparada para futuramente disponibilizar documentos médicos.</p>
               <span class="mais">Saiba mais</span>
             </a>
             <a class="servico" href="#contato">
@@ -191,45 +145,142 @@
         </div>
       </section>
 
-      <!-- ESPECIALIDADES (preenchido por home.js) -->
+      <!-- ESPECIALIDADES -->
       <section class="secao secao-mint" aria-labelledby="esp-titulo">
         <div class="container">
           <div class="secao-titulo">
             <h2 id="esp-titulo">Encontre atendimento por especialidade</h2>
           </div>
-          <div class="grade-esp" id="grade-esp"></div>
+          <div class="grade-esp">
+            <a class="esp" href="pages/medicos.php?especialidade=1">
+              <i class="fa-solid fa-heart-pulse"></i>
+              <b>Cardiologia</b>
+              <small>1 profissional</small>
+            </a>
+            <a class="esp" href="pages/medicos.php?especialidade=2">
+              <i class="fa-solid fa-stethoscope"></i>
+              <b>Dermatologia</b>
+              <small>1 profissional</small>
+            </a>
+            <a class="esp" href="pages/medicos.php?especialidade=3">
+              <i class="fa-solid fa-baby"></i>
+              <b>Pediatria</b>
+              <small>1 profissional</small>
+            </a>
+            <a class="esp" href="pages/medicos.php?especialidade=4">
+              <i class="fa-solid fa-bone"></i>
+              <b>Ortopedia</b>
+              <small>1 profissional</small>
+            </a>
+          </div>
           <div class="mt-4">
-            <a class="btn btn-mc-outline" href="pages/especialidades.php"
-              >Ver todas as especialidades</a
-            >
+            <a class="btn btn-mc-outline" href="pages/especialidades.php">Ver todas as especialidades</a>
           </div>
         </div>
       </section>
 
-      <!-- MÉDICOS EM DESTAQUE (preenchido por home.js) -->
+      <!-- MÉDICOS EM DESTAQUE (exemplos: troque pelos dados reais) -->
       <section class="secao" aria-labelledby="dest-titulo">
         <div class="container">
-          <div
-            class="secao-titulo d-flex justify-content-between align-items-end flex-wrap gap-3"
-          >
+          <div class="secao-titulo d-flex justify-content-between align-items-end flex-wrap gap-3">
             <div>
               <h2 id="dest-titulo">Médicos mais bem avaliados</h2>
               <p>Profissionais com os melhores comentários de pacientes.</p>
             </div>
-            <a class="btn btn-mc-outline" href="pages/medicos.php"
-              >Ver todos os médicos</a
-            >
+            <a class="btn btn-mc-outline" href="pages/medicos.php">Ver todos os médicos</a>
+          </div>
+          <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+              <article class="medico-card">
+                <div class="cab">
+                  <div class="avatar" style="background: #15915F" aria-hidden="true">CA</div>
+                  <div>
+                    <h3><a href="pages/medico.php?id=1">Dr. Carlos Almeida</a></h3>
+                    <div class="esp-nome">Cardiologia</div>
+                    <div class="crm">CRM-RS 12345</div>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span><i class="fa-solid fa-location-dot"></i>Porto Alegre - RS</span>
+                  <span class="nota"><i class="fa-solid fa-star"></i>4,9 <span class="text-muted-mc fw-normal">(187)</span></span>
+                </div>
+                <div class="proximo">Próximo horário<b>Hoje, 14:00</b></div>
+                <div class="acoes">
+                  <a class="btn btn-mc-outline" href="pages/medico.php?id=1">Ver perfil</a>
+                  <a class="btn btn-mc" href="pages/agendamento.php?medico=1">Agendar</a>
+                </div>
+              </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <article class="medico-card">
+                <div class="cab">
+                  <div class="avatar" style="background: #1693A5" aria-hidden="true">MS</div>
+                  <div>
+                    <h3><a href="pages/medico.php?id=2">Dra. Marina Souza</a></h3>
+                    <div class="esp-nome">Dermatologia</div>
+                    <div class="crm">CRM-RS 23456</div>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span><i class="fa-solid fa-location-dot"></i>Canoas - RS</span>
+                  <span class="nota"><i class="fa-solid fa-star"></i>4,8 <span class="text-muted-mc fw-normal">(142)</span></span>
+                </div>
+                <div class="proximo">Próximo horário<b>Amanhã, 09:30</b></div>
+                <div class="acoes">
+                  <a class="btn btn-mc-outline" href="pages/medico.php?id=2">Ver perfil</a>
+                  <a class="btn btn-mc" href="pages/agendamento.php?medico=2">Agendar</a>
+                </div>
+              </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <article class="medico-card">
+                <div class="cab">
+                  <div class="avatar" style="background: #0F7B50" aria-hidden="true">RL</div>
+                  <div>
+                    <h3><a href="pages/medico.php?id=3">Dr. Rafael Lima</a></h3>
+                    <div class="esp-nome">Pediatria</div>
+                    <div class="crm">CRM-RS 34567</div>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span><i class="fa-solid fa-location-dot"></i>Porto Alegre - RS</span>
+                  <span class="nota"><i class="fa-solid fa-star"></i>4,8 <span class="text-muted-mc fw-normal">(120)</span></span>
+                </div>
+                <div class="proximo">Próximo horário<b>Qua, 10:00</b></div>
+                <div class="acoes">
+                  <a class="btn btn-mc-outline" href="pages/medico.php?id=3">Ver perfil</a>
+                  <a class="btn btn-mc" href="pages/agendamento.php?medico=3">Agendar</a>
+                </div>
+              </article>
+            </div>
+            <div class="col-md-6 col-xl-3">
+              <article class="medico-card">
+                <div class="cab">
+                  <div class="avatar" style="background: #0A4D36" aria-hidden="true">JP</div>
+                  <div>
+                    <h3><a href="pages/medico.php?id=4">Dra. Juliana Pires</a></h3>
+                    <div class="esp-nome">Ortopedia</div>
+                    <div class="crm">CRM-RS 45678</div>
+                  </div>
+                </div>
+                <div class="meta">
+                  <span><i class="fa-solid fa-location-dot"></i>São Leopoldo - RS</span>
+                  <span class="nota"><i class="fa-solid fa-star"></i>4,7 <span class="text-muted-mc fw-normal">(98)</span></span>
+                </div>
+                <div class="proximo">Próximo horário<b>Qui, 15:30</b></div>
+                <div class="acoes">
+                  <a class="btn btn-mc-outline" href="pages/medico.php?id=4">Ver perfil</a>
+                  <a class="btn btn-mc" href="pages/agendamento.php?medico=4">Agendar</a>
+                </div>
+              </article>
+            </div>
           </div>
           <div class="row g-4" id="destaques"></div>
         </div>
       </section>
 
       <!-- COMO FUNCIONA -->
-      <section
-        class="secao secao-mint"
-        id="como-funciona"
-        aria-labelledby="como-titulo"
-      >
+      <section class="secao secao-mint" id="como-funciona" aria-labelledby="como-titulo">
         <div class="container">
           <div class="secao-titulo">
             <h2 id="como-titulo">Como funciona</h2>
@@ -251,10 +302,7 @@
             </div>
             <div class="passo">
               <h3>Compareça ao atendimento</h3>
-              <p>
-                Vá ao consultório ou entre na consulta online no horário
-                marcado.
-              </p>
+              <p>Vá ao consultório ou entre na consulta online no horário marcado.</p>
             </div>
           </div>
         </div>
@@ -267,29 +315,13 @@
             <div class="row align-items-center g-5">
               <div class="col-lg-7">
                 <h2 id="tele-titulo">Consulte seu médico de onde estiver</h2>
-                <p>
-                  Vários profissionais atendem por vídeo. Você economiza
-                  deslocamento e mantém o mesmo acompanhamento.
-                </p>
+                <p>Vários profissionais atendem por vídeo. Você economiza deslocamento e mantém o mesmo acompanhamento.</p>
                 <ul>
-                  <li>
-                    <i class="fa-solid fa-check"></i>Retornos e acompanhamentos
-                    sem sair de casa
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-check"></i>Escolha entre presencial e
-                    online ao agendar
-                  </li>
-                  <li>
-                    <i class="fa-solid fa-check"></i>Mesma agenda, mesmo número
-                    de consulta
-                  </li>
+                  <li><i class="fa-solid fa-check"></i>Retornos e acompanhamentos sem sair de casa</li>
+                  <li><i class="fa-solid fa-check"></i>Escolha entre presencial e online ao agendar</li>
+                  <li><i class="fa-solid fa-check"></i>Mesma agenda, mesmo número de consulta</li>
                 </ul>
-                <a
-                  class="btn btn-claro btn-lg"
-                  href="pages/medicos.php?atendimento=online"
-                  >Buscar atendimento online</a
-                >
+                <a class="btn btn-claro btn-lg" href="pages/medicos.php?atendimento=online">Buscar atendimento online</a>
               </div>
               <div class="col-lg-5" aria-hidden="true">
                 <div class="tele-tela">
@@ -300,9 +332,7 @@
                   <div class="controles">
                     <span><i class="fa-solid fa-microphone"></i></span>
                     <span><i class="fa-solid fa-video"></i></span>
-                    <span class="fim"
-                      ><i class="fa-solid fa-phone-slash"></i
-                    ></span>
+                    <span class="fim"><i class="fa-solid fa-phone-slash"></i></span>
                   </div>
                 </div>
               </div>
@@ -318,9 +348,8 @@
             <div class="col-lg-6">
               <h2 id="sobre-titulo">Sobre a MedCare</h2>
               <p class="mt-3">
-                A MedCare aproxima pacientes e médicos com uma agenda clara,
-                transparente e fácil de usar. Nosso trabalho é tirar o atrito
-                entre você e o cuidado de que precisa.
+                A MedCare aproxima pacientes e médicos com uma agenda clara, transparente e fácil de usar.
+                Nosso trabalho é tirar o atrito entre você e o cuidado de que precisa.
               </p>
             </div>
             <div class="col-lg-6">
@@ -328,31 +357,22 @@
                 <div class="principio">
                   <i class="fa-solid fa-eye"></i>
                   <div>
-                    <b>Transparência</b
-                    ><span
-                      >Horários reais, valores e convênios à vista antes de
-                      agendar.</span
-                    >
+                    <b>Transparência</b>
+                    <span>Horários reais, valores e convênios à vista antes de agendar.</span>
                   </div>
                 </div>
                 <div class="principio">
                   <i class="fa-solid fa-hand-pointer"></i>
                   <div>
-                    <b>Praticidade</b
-                    ><span
-                      >Da busca à confirmação em poucos cliques, no celular ou
-                      no computador.</span
-                    >
+                    <b>Praticidade</b>
+                    <span>Da busca à confirmação em poucos cliques, no celular ou no computador.</span>
                   </div>
                 </div>
                 <div class="principio">
                   <i class="fa-solid fa-lock"></i>
                   <div>
-                    <b>Privacidade</b
-                    ><span
-                      >Seus dados são tratados com segurança e conforme a
-                      LGPD.</span
-                    >
+                    <b>Privacidade</b>
+                    <span>Seus dados são tratados com segurança e conforme a LGPD.</span>
                   </div>
                 </div>
               </div>
@@ -370,148 +390,73 @@
           <div class="accordion" id="faqLista">
             <div class="accordion-item">
               <h3 class="accordion-header">
-                <button
-                  class="accordion-button"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq0"
-                  aria-expanded="true"
-                  aria-controls="faq0"
-                >
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq0" aria-expanded="true" aria-controls="faq0">
                   Preciso criar uma conta para agendar?
                 </button>
               </h3>
-              <div
-                id="faq0"
-                class="accordion-collapse collapse show"
-                data-bs-parent="#faqLista"
-              >
+              <div id="faq0" class="accordion-collapse collapse show" data-bs-parent="#faqLista">
                 <div class="accordion-body">
-                  Você pode pesquisar médicos e ver horários sem conta. Para
-                  confirmar uma consulta, é preciso entrar ou criar uma conta
-                  gratuita.
+                  Você pode pesquisar médicos e ver horários sem conta. Para confirmar uma consulta, é preciso entrar ou criar uma conta gratuita.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h3 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq1"
-                  aria-expanded="false"
-                  aria-controls="faq1"
-                >
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
                   Como cancelo uma consulta?
                 </button>
               </h3>
-              <div
-                id="faq1"
-                class="accordion-collapse collapse"
-                data-bs-parent="#faqLista"
-              >
+              <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqLista">
                 <div class="accordion-body">
-                  Em Minhas consultas, escolha a consulta e clique em Cancelar
-                  consulta. O horário volta para a agenda do médico. Consultas
-                  já concluídas não podem ser canceladas.
+                  Em Minhas consultas, escolha a consulta e clique em Cancelar consulta. O horário volta para a agenda do médico. Consultas já concluídas não podem ser canceladas.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h3 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq2"
-                  aria-expanded="false"
-                  aria-controls="faq2"
-                >
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
                   Posso escolher entre presencial e online?
                 </button>
               </h3>
-              <div
-                id="faq2"
-                class="accordion-collapse collapse"
-                data-bs-parent="#faqLista"
-              >
+              <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqLista">
                 <div class="accordion-body">
-                  Sim, quando o médico oferece as duas modalidades. A opção
-                  aparece na etapa de agendamento.
+                  Sim, quando o médico oferece as duas modalidades. A opção aparece na etapa de agendamento.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h3 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq3"
-                  aria-expanded="false"
-                  aria-controls="faq3"
-                >
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
                   Meus dados estão seguros?
                 </button>
               </h3>
-              <div
-                id="faq3"
-                class="accordion-collapse collapse"
-                data-bs-parent="#faqLista"
-              >
+              <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqLista">
                 <div class="accordion-body">
-                  Sim. As senhas são armazenadas com criptografia (hash) e o
-                  acesso às informações respeita o tipo de usuário: paciente,
-                  médico ou administrador.
+                  Sim. As senhas são armazenadas com criptografia (hash) e o acesso às informações respeita o tipo de usuário: paciente, médico ou administrador.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h3 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq4"
-                  aria-expanded="false"
-                  aria-controls="faq4"
-                >
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false" aria-controls="faq4">
                   Os convênios aparecem no perfil?
                 </button>
               </h3>
-              <div
-                id="faq4"
-                class="accordion-collapse collapse"
-                data-bs-parent="#faqLista"
-              >
+              <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqLista">
                 <div class="accordion-body">
-                  Cada médico mostra os convênios que aceita e o valor da
-                  consulta particular.
+                  Cada médico mostra os convênios que aceita e o valor da consulta particular.
                 </div>
               </div>
             </div>
             <div class="accordion-item">
               <h3 class="accordion-header">
-                <button
-                  class="accordion-button collapsed"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#faq5"
-                  aria-expanded="false"
-                  aria-controls="faq5"
-                >
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5" aria-expanded="false" aria-controls="faq5">
                   E se não houver horário na data que eu quero?
                 </button>
               </h3>
-              <div
-                id="faq5"
-                class="accordion-collapse collapse"
-                data-bs-parent="#faqLista"
-              >
+              <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqLista">
                 <div class="accordion-body">
-                  Use a busca com data para ver quem tem vaga naquele dia, ou
-                  veja o próximo horário disponível em cada cartão.
+                  Use a busca com data para ver quem tem vaga naquele dia, ou veja o próximo horário disponível em cada cartão.
                 </div>
               </div>
             </div>
@@ -524,18 +469,15 @@
         <div class="container">
           <div class="cta">
             <h2 id="cta-titulo">Pronto para cuidar da sua saúde?</h2>
-            <p>
-              Encontre um médico e escolha seu horário em menos de dois minutos.
-            </p>
-            <a class="btn btn-claro btn-lg" href="pages/agendamento.php"
-              >Agendar consulta</a
-            >
+            <p>Encontre um médico e escolha seu horário em menos de dois minutos.</p>
+            <a class="btn btn-claro btn-lg" href="pages/agendamento.php">Agendar consulta</a>
           </div>
         </div>
       </section>
     </main>
 
-    <div data-include="components/footer.html"></div>
+    <!-- id="contato": o link "Atendimento" rola até o rodapé -->
+    <div id="contato" data-include="components/footer.html"></div>
     <div data-include="components/templates.html"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

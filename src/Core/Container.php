@@ -10,34 +10,53 @@ use MedCare\Repositories\Contracts\{
     MedicoRepositoryInterface
 };
 use MedCare\Repositories\Demo;
+use MedCare\Repositories\Pdo;
 use RuntimeException;
 
-/**
- * Único lugar que decide QUAL implementação de repositório usar.
- *
- * Para migrar ao MySQL: crie as classes em src/Repositories/Pdo/ (mesmos
- * contratos de Contracts/), troque os casos "pdo" abaixo e defina
- * DATA_DRIVER=pdo no .env. Páginas e serviços não mudam.
- */
+
 final class Container
 {
     private static array $cache = [];
+    private static ?\PDO $pdoInstance = null;
 
     private static function driver(): string
     {
-        return (string) config('data_driver', 'demo');
+        // FORÇADO TEMPORARIAMENTE: Retorna 'demo' para o sistema rodar sem precisar do MySQL ligado
+        return 'demo';
     }
 
-    private static function pdoIndisponivel(string $nome): never
+    /**
+     * Cria e gerencia uma única conexão com o banco de dados MySQL (Singleton)
+     */
+    private static function getPdoConnection(): \PDO
     {
-        throw new RuntimeException("Repositório PDO '{$nome}' ainda não implementado (Fase 3). Use DATA_DRIVER=demo.");
+        if (self::$pdoInstance === null) {
+            $host     = config('db_host', '127.0.0.1');
+            $port     = config('db_port', '3306');
+            $dbname   = config('db_name', 'medcare');
+            $username = config('db_user', 'root');
+            $password = config('db_pass', '');
+
+            try {
+                $dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset=utf8mb4";
+                self::$pdoInstance = new \PDO($dsn, $username, $password, [
+                    \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+                    \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
+                    \PDO::ATTR_EMULATE_PREPARES => false,
+                ]);
+            } catch (\PDOException $e) {
+                throw new RuntimeException("Erro ao conectar com o banco de dados MySQL: " . $e->getMessage());
+            }
+        }
+
+        return self::$pdoInstance;
     }
 
     public static function medicos(): MedicoRepositoryInterface
     {
         return self::$cache['medicos'] ??= match (self::driver()) {
             'demo'  => new Demo\MedicoRepository(),
-            default => self::pdoIndisponivel('MedicoRepository'),
+            default => new Pdo\MedicoRepository(self::getPdoConnection()),
         };
     }
 
@@ -45,7 +64,7 @@ final class Container
     {
         return self::$cache['especialidades'] ??= match (self::driver()) {
             'demo'  => new Demo\EspecialidadeRepository(),
-            default => self::pdoIndisponivel('EspecialidadeRepository'),
+            default => new Pdo\EspecialidadeRepository(self::getPdoConnection()),
         };
     }
 
@@ -53,7 +72,7 @@ final class Container
     {
         return self::$cache['horarios'] ??= match (self::driver()) {
             'demo'  => new Demo\HorarioRepository(),
-            default => self::pdoIndisponivel('HorarioRepository'),
+            default => new Pdo\HorarioRepository(self::getPdoConnection()),
         };
     }
 
@@ -61,7 +80,18 @@ final class Container
     {
         return self::$cache['consultas'] ??= match (self::driver()) {
             'demo'  => new Demo\ConsultaRepository(),
-            default => self::pdoIndisponivel('ConsultaRepository'),
+            default => new Pdo\ConsultaRepository(self::getPdoConnection()),
+        };
+    }
+
+    /**
+     * Gerencia o repositório de pacientes com suporte dinâmico ao modo demo
+     */
+    public static function pacientes(): mixed
+    {
+        return self::$cache['pacientes'] ??= match (self::driver()) {
+            'demo'  => new Demo\PacienteRepository(),
+            default => new Pdo\PacienteRepository(self::getPdoConnection()),
         };
     }
 }

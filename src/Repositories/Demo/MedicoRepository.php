@@ -8,6 +8,18 @@ use MedCare\Repositories\Contracts\MedicoRepositoryInterface;
 
 final class MedicoRepository implements MedicoRepositoryInterface
 {
+    // ADICIONADO: Método exigido pela API para listar todos os médicos do DemoData
+    public function listarTodos(): array
+    {
+        return DemoData::medicos();
+    }
+
+    // ADICIONADO: Método alternativo apontando para a listagem completa
+    public function todos(): array
+    {
+        return $this->listarTodos();
+    }
+
     public function buscar(array $filtros = []): array
     {
         $q       = normalizar((string) ($filtros['q'] ?? ''));

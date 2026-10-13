@@ -2,13 +2,12 @@
 declare(strict_types=1);
 
 /**
- * Ponto único de inicialização. Toda página/endpoint começa com:
- *   require dirname(__DIR__, 2) . '/src/bootstrap.php';
+ * Ponto único de inicialização.
  */
 
 define('ROOT_PATH', dirname(__DIR__));
 
-// Autoload PSR-4 simples: MedCare\Foo\Bar -> src/Foo/Bar.php
+// Autoload PSR-4 simples para carregar os Repositórios automaticamente
 spl_autoload_register(static function (string $classe): void {
     $prefixo = 'MedCare\\';
     if (strncmp($classe, $prefixo, strlen($prefixo)) !== 0) {
@@ -20,9 +19,11 @@ spl_autoload_register(static function (string $classe): void {
     }
 });
 
-require ROOT_PATH . '/src/Helpers/functions.php';
+// Carrega as funções globais (exigir_metodo, json_resposta, etc.)
+require_once ROOT_PATH . '/src/Helpers/functions.php';
 
-$GLOBALS['medcare_config'] = require ROOT_PATH . '/config/app.php';
-date_default_timezone_set(config('fuso'));
+// Define o fuso horário do Brasil de forma direta e segura
+date_default_timezone_set('America/Sao_Paulo');
 
-MedCare\Core\Session::iniciar();
+// Inicializa a sessão segura do paciente
+\MedCare\Core\Session::iniciar();

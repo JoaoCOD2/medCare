@@ -1,64 +1,168 @@
-/* Página inicial: especialidades, médicos em destaque e cartão "agenda ao vivo". */
-MC.pronto.then(function () {
+
+/* =========================================================
+   MedCare — página inicial
+   Especialidades e médicos em destaque
+   ========================================================= */
+
+(function () {
   'use strict';
-  var hoje = new Date().toISOString().slice(0, 10);
-  MC.$('#h-data').min = hoje;
 
-  // ---- Especialidades e cidades
-  MC.api.get('api/filtros.php').then(function (r) {
-    var grade = MC.$('#grade-esp');
-    r.especialidades.forEach(function (e) {
-      grade.appendChild(MC.preencher(MC.modelo('tpl-esp'), {
-        url: 'pages/medicos.php?especialidade=' + e.id,
-        icone_classe: 'fa-solid ' + e.icone,
-        nome: e.nome,
-        contagem: e.total_medicos + (e.total_medicos === 1 ? ' profissional' : ' profissionais')
-      }));
-    });
-    var lista = MC.$('#lista-cidades');
-    r.cidades.forEach(function (c) { lista.appendChild(MC.el('option', { value: c })); });
-  }).catch(function () { MC.toast('Não foi possível carregar as especialidades.', 'erro'); });
+  document.addEventListener('DOMContentLoaded', iniciarHome);
 
-  // ---- Médicos em destaque + cartão do hero
-  MC.api.get('api/medicos.php', { limite: 4 }).then(function (r) {
-    var cont = MC.$('#destaques');
-    r.medicos.forEach(function (m) {
-      var col = MC.el('div', { class: 'col-md-6 col-xl-3' });
-      col.appendChild(MC.cartaoMedico(m));
-      cont.appendChild(col);
-    });
-    if (r.medicos[0]) return montarAgendaViva(r.medicos[0]);
-  }).catch(function () { MC.toast('Não foi possível carregar os médicos.', 'erro'); });
+  function iniciarHome() {
+    renderizarEspecialidades();
+    prepararDestaques();
+    configurarBuscaInicial();
+    configurarDataMinima();
+  }
 
-  function montarAgendaViva(m) {
-    return MC.api.get('api/horarios.php', { medico_id: m.id }).then(function (r) {
-      var dias = r.dias.slice(0, 5);
-      if (!dias.length) return null;
-      return MC.api.get('api/horarios.php', { medico_id: m.id, data: dias[0].data }).then(function (h) {
-        var av = MC.$('#av-avatar');
-        av.textContent = m.iniciais; av.style.background = m.cor;
-        MC.$('#av-nome').textContent = m.nome;
-        MC.$('#av-esp').textContent = m.especialidade;
-        MC.$('#av-nota').textContent = MC.fmt.nota(m.nota);
+  // ---------- Especialidades ----------
+  const especialidades = [
+    {
+      nome: 'Cardiologia',
+      icone: 'fa-solid fa-heart-pulse',
+      descricao: 'Cuidados com o coração'
+    },
+    {
+      nome: 'Dermatologia',
+      icone: 'fa-solid fa-hand',
+      descricao: 'Cuidados com a pele'
+    },
+    {
+      nome: 'Pediatria',
+      icone: 'fa-solid fa-baby',
+      descricao: 'Saúde de crianças'
+    },
+    {
+      nome: 'Ortopedia',
+      icone: 'fa-solid fa-bone',
+      descricao: 'Ossos e articulações'
+    },
+    {
+      nome: 'Neurologia',
+      icone: 'fa-solid fa-brain',
+      descricao: 'Sistema nervoso'
+    },
+    {
+      nome: 'Oftalmologia',
+      icone: 'fa-solid fa-eye',
+      descricao: 'Saúde dos olhos'
+    },
+    {
+      nome: 'Ginecologia',
+      icone: 'fa-solid fa-person-dress',
+      descricao: 'Saúde da mulher'
+    },
+    {
+      nome: 'Clínica Geral',
+      icone: 'fa-solid fa-stethoscope',
+      descricao: 'Cuidados gerais'
+    }
+  ];
 
-        var cd = MC.limpar(MC.$('#av-dias'));
-        dias.forEach(function (d, i) {
-          cd.appendChild(MC.el('div', { class: 'dia-chip' + (i === 0 ? ' ativo' : '') }, [
-            document.createTextNode(MC.fmt.diaSemana(d.data)), MC.el('b', { text: MC.fmt.dia(d.data) })
-          ]));
-        });
+  function renderizarEspecialidades() {
+    const grade = document.getElementById('grade-esp');
 
-        var ch = MC.limpar(MC.$('#av-horas')), primeiro = true;
-        h.slots.slice(0, 6).forEach(function (s) {
-          if (s.status !== 'disponivel') { ch.appendChild(MC.el('span', { class: 'slot ocupado', text: s.hora, 'aria-label': 'Horário ocupado' })); return; }
-          ch.appendChild(MC.el('a', {
-            class: 'slot' + (primeiro ? ' destaque' : ''), text: s.hora,
-            href: 'pages/agendamento.php?medico_id=' + m.id + '&horario=' + encodeURIComponent(s.id)
-          }));
-          primeiro = false;
-        });
-        MC.$('#coluna-agenda').hidden = false;
-      });
+    if (!grade) return;
+
+    grade.replaceChildren();
+
+    especialidades.forEach((especialidade) => {
+      const link = document.createElement('a');
+      link.className = 'esp';
+      link.href = 'pages/medicos.php?q=' +
+        encodeURIComponent(especialidade.nome);
+
+      const icone = document.createElement('i');
+      icone.className = especialidade.icone;
+      icone.setAttribute('aria-hidden', 'true');
+
+      const nome = document.createElement('b');
+      nome.textContent = especialidade.nome;
+
+      const descricao = document.createElement('small');
+      descricao.textContent = especialidade.descricao;
+
+      link.append(icone, nome, descricao);
+      grade.appendChild(link);
     });
   }
-});
+
+  // ---------- Médicos em destaque ----------
+  function prepararDestaques() {
+    const grade = document.getElementById('destaques');
+
+    if (!grade) return;
+
+    /*
+     * Os médicos devem vir do backend/banco de dados.
+     * Não criamos profissionais fictícios.
+     *
+     * Quando a integração com o endpoint PHP estiver pronta,
+     * os cards reais poderão ser inseridos nesta área.
+     */
+
+    const coluna = document.createElement('div');
+    coluna.className = 'col-12';
+
+    const vazio = document.createElement('div');
+    vazio.className = 'vazio';
+
+    const icone = document.createElement('i');
+    icone.className = 'fa-solid fa-user-doctor';
+    icone.setAttribute('aria-hidden', 'true');
+
+    const titulo = document.createElement('h3');
+    titulo.textContent = 'Encontre seu médico';
+
+    const texto = document.createElement('p');
+    texto.textContent =
+      'Acesse a lista de profissionais para consultar especialidades e opções de atendimento.';
+
+    const botao = document.createElement('a');
+    botao.className = 'btn btn-mc';
+    botao.href = 'pages/medicos.php';
+    botao.textContent = 'Ver médicos';
+
+    vazio.append(icone, titulo, texto, botao);
+    coluna.appendChild(vazio);
+    grade.appendChild(coluna);
+  }
+
+  // ---------- Busca da página inicial ----------
+  function configurarBuscaInicial() {
+    const formulario = document.querySelector('.busca-hero');
+
+    if (!formulario) return;
+
+    formulario.addEventListener('submit', (evento) => {
+      const campoBusca = document.getElementById('h-q');
+      const campoCidade = document.getElementById('h-cidade');
+
+      if (campoBusca) {
+        campoBusca.value = campoBusca.value.trim();
+      }
+
+      if (campoCidade) {
+        campoCidade.value = campoCidade.value.trim();
+      }
+
+      // Permite o envio normal para pages/medicos.php.
+      // Não usa preventDefault para não bloquear a pesquisa.
+    });
+  }
+
+  // ---------- Impedir seleção de datas passadas ----------
+  function configurarDataMinima() {
+    const campoData = document.getElementById('h-data');
+
+    if (!campoData) return;
+
+    const agora = new Date();
+    const ano = agora.getFullYear();
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const dia = String(agora.getDate()).padStart(2, '0');
+
+    campoData.min = `${ano}-${mes}-${dia}`;
+  }
+})();
