@@ -53,20 +53,40 @@
   var ctx = null;
   MC.api = {
     get: function (url, params) {
-      return fetch(montarUrl(url, params), { headers: { Accept: 'application/json' } }).then(tratar);
+      // cache: 'no-store' → o navegador nunca reaproveita a resposta (evita "login salvo")
+      return fetch(montarUrl(url, params), {
+        cache: 'no-store',
+        credentials: 'same-origin',
+        headers: { Accept: 'application/json' }
+      }).then(tratar);
     },
     post: function (url, corpo) {
       return MC.contexto().then(function (c) {
         return fetch(url, {
           method: 'POST',
+          cache: 'no-store',
+          credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-Token': c.csrf },
           body: JSON.stringify(corpo)
         }).then(tratar);
       });
     }
   };
-  /** Dados da sessão (token CSRF, paciente). Buscado uma única vez. */
-  MC.contexto = function () { return (ctx = ctx || MC.api.get('api/contexto.php')); };
+  /** Aba nova (sem marca no sessionStorage) = o usuário saiu e voltou ao site:
+      encerra o login antigo no servidor. O sessionStorage some quando a aba fecha. */
+  function garantirAbaNova() {
+    try {
+      if (sessionStorage.getItem('mc_aba')) return Promise.resolve();
+      sessionStorage.setItem('mc_aba', '1');
+    } catch (e) { return Promise.resolve(); }
+    return fetch('api/sair.php', { method: 'POST', cache: 'no-store', credentials: 'same-origin' })
+      .catch(function () { /* sem API: segue */ });
+  }
+
+  /** Dados da sessão (token CSRF, paciente). Buscado uma única vez por página. */
+  MC.contexto = function () {
+    return (ctx = ctx || garantirAbaNova().then(function () { return MC.api.get('api/contexto.php'); }));
+  };
 
   // ---------------------------------------------------------------- DOM
   MC.el = function (tag, attrs, filhos) {
@@ -122,7 +142,7 @@
     var no = MC.modelo('tpl-medico-card'), prox = m.proximo_horario;
     MC.preencher(no, {
       iniciais: m.iniciais, avatar_estilo: 'background:' + m.cor,
-      nome: m.nome, url_perfil: 'medico.html?id=' + m.id,
+      nnome: m.nome, url_perfil: 'pages/medico.php?id=' + m.id,
       especialidade: m.especialidade, crm_texto: 'CRM-' + m.crm_uf + ' ' + m.crm,
       local: m.cidade + ' – ' + m.estado + ' · ' + m.bairro, endereco: m.endereco,
       modalidade_rotulo: MC.fmt.modalidade(m.modalidade),
@@ -158,8 +178,30 @@
     });
   }
 
+  /** Mostra "Entrar/Criar conta" (deslogado) OU "Olá/Minha conta/Sair" (logado). */
+  MC.atualizarMenuUsuario = function (usuario) {
+    var nome = usuario && usuario.nome ? String(usuario.nome).trim() : '';
+    var logado = nome !== '';
+    MC.$$('.so-logado').forEach(function (el) { el.hidden = !logado; });
+    MC.$$('.so-deslogado').forEach(function (el) { el.hidden = logado; });
+    // O header usa class="nome-usuario" (não id), então preenche todos os elementos com essa classe
+    MC.$$('.nome-usuario').forEach(function (el) {
+      el.textContent = logado ? nome.split(' ')[0] : '';
+    });
+  };
+  function iniciarMenuUsuario() {
+    MC.atualizarMenuUsuario(null);               // padrão: deslogado
+    return MC.contexto().then(function (c) {
+      MC.atualizarMenuUsuario(c && (c.paciente || c.usuario) || null);
+    }).catch(function () { /* sem API: continua deslogado */ });
+  }
   /** Promessa resolvida quando header/footer/templates já estão na página. */
   MC.pronto = new Promise(function (ok) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ok); else ok();
-  }).then(incluir).then(marcarMenu).catch(function (e) { console.error(e); });
+  }).then(incluir).then(marcarMenu).then(iniciarMenuUsuario).catch(function (e) { console.error(e); });
+
+  // Se a página voltar do cache do navegador (botão "voltar"), confere o login de novo
+  window.addEventListener('pageshow', function (ev) {
+    if (ev.persisted) window.location.reload();
+  });
 })();

@@ -5,6 +5,17 @@
   'use strict';
 
   var D = JSON.parse(document.getElementById('dados-agendamento').textContent);
+
+  // Valores padrão: evita erro se o PHP não enviar alguma chave
+  D.especialidades = D.especialidades || [];
+  D.medicos = D.medicos || [];
+  D.inicial = D.inicial || {};
+  D.urls = D.urls || {};
+  // Se o PHP não enviar as URLs, usa os endpoints padrão
+  D.urls.horarios = D.urls.horarios || '/api/horarios.php';
+  D.urls.agendar = D.urls.agendar || '/api/agendamento.php';
+  D.paciente = D.paciente || { nome: '', email: '' };
+
   var csrf = document.querySelector('meta[name="csrf-token"]').content;
   var $ = function (s) { return document.querySelector(s); };
 
@@ -218,16 +229,19 @@
 
   // ---------- Início (aceita ?medico_id= e ?horario= vindos de outras páginas) ----------
   function iniciar() {
-    var m = D.medicos.filter(function (x) { return x.id === D.inicial.medico_id; })[0];
+    var ini = D.inicial || {};
+    var medicoId = parseInt(ini.medico_id, 10) || 0;
+
+    var m = D.medicos.filter(function (x) { return x && x.id === medicoId; })[0];
     if (!m) return ir(1);
     escolherMedico(m);
 
-    var p = /^(\d+)-(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})$/.exec(D.inicial.horario || '');
+    var p = /^(\d+)-(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})$/.exec(ini.horario || '');
     if (!p || +p[1] !== m.id) return ir(2);
 
     var data = p[2] + '-' + p[3] + '-' + p[4];
     getJson(D.urls.horarios + '?medico_id=' + m.id + '&data=' + data).then(function (r) {
-      var slot = r.ok && r.slots.filter(function (s) { return s.id === D.inicial.horario && s.status === 'disponivel'; })[0];
+      var slot = r.ok && r.slots.filter(function (s) { return s.id === ini.horario && s.status === 'disponivel'; })[0];
       if (!slot) { estado.data = data; ir(4); erro('Esse horário não está mais disponível. Escolha outro.'); return; }
       estado.data = data; estado.horario = { id: slot.id, hora: slot.hora };
       ir(5);

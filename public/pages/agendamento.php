@@ -4,30 +4,41 @@ require dirname(__DIR__, 2) . '/src/bootstrap.php';
 
 use MedCare\Core\{Auth, Container};
 
+// Visitante é enviado para o login e volta aqui depois (parâmetro "next").
+Auth::exigir('paciente');
+
 $medicos = Container::medicos()->buscar();
 $especialidades = Container::especialidades()->todas();
-$paciente = Auth::pacienteAtual();
+$paciente = Auth::pacienteAtual() ?? [];
 
 // Dados mínimos que o assistente (JS) precisa — sem biografia etc.
 $dadosJs = [
     'especialidades' => array_map(static fn($e) => ['id' => $e['id'], 'nome' => $e['nome']], $especialidades),
     'medicos' => array_map(static fn($m) => [
-        'id' => $m['id'], 'nome' => $m['nome'], 'iniciais' => iniciais($m['nome']), 'cor' => cor_avatar($m['nome']),
-        'especialidade_id' => $m['especialidade_id'], 'especialidade' => $m['especialidade'],
-        'modalidade' => $m['modalidade'], 'clinica' => $m['clinica'], 'endereco' => $m['endereco'],
-        'cidade' => $m['cidade'], 'valor' => moeda($m['valor_consulta']),
-    ], $medicos),
-    'inicial' => [
-        'medico_id' => (int) ($_GET['medico_id'] ?? 0),
-        'horario'   => entrada('horario'),
-    ],
-    'paciente' => ['nome' => $paciente['nome'], 'email' => $paciente['email'], 'demo' => !empty($paciente['demo'])],
-    'urls' => [
-        'horarios'   => url('api/horarios.php'),
-        'agendar'    => url('api/agendamento.php'),
+    'id' => $m['id'],
+    'nome' => $m['nome'],
+    'iniciais' => iniciais($m['nome']),
+    'cor' => cor_avatar($m['nome']),
+    'especialidade_id' => $m['especialidade_id'],
+    'especialidade' => $m['especialidade'] ?? '',
+    'modalidade' => $m['modalidade'] ?? $m['atendimento'] ?? 'ambos',
+    'clinica' => $m['clinica'] ?? '',
+    'endereco' => $m['endereco'] ?? trim(
+        ($m['bairro'] ?? '') . ', ' . ($m['cidade'] ?? ''),
+        ', '
+    ),
+    'cidade' => $m['cidade'] ?? '',
+    'valor' => isset($m['valor_consulta']) && is_numeric($m['valor_consulta'])
+        ? moeda((float) $m['valor_consulta'])
+        : '',
+], $medicos),
+    'paciente' => [
+        'id' => $paciente['id'] ?? null,
+        'nome' => $paciente['nome'] ?? '',
+        'email' => $paciente['email'] ?? '',
+        'telefone' => $paciente['telefone'] ?? '',
     ],
 ];
-
 $titulo = 'Agendar consulta';
 $pagina = 'medicos';
 $extraJs = ['js/agendamento.js'];
@@ -104,9 +115,6 @@ include dirname(__DIR__, 2) . '/includes/header.php';
           <dt>Paciente</dt><dd id="r-paciente"></dd>
         </dl>
       </div>
-      <?php if (!empty($paciente['demo'])): ?>
-        <p class="small text-muted-mc"><i class="fa-solid fa-circle-info me-1"></i>Modo demonstração: o login real chega na Fase 4. Por ora o agendamento usa um paciente de exemplo e não é salvo permanentemente.</p>
-      <?php endif; ?>
     </div>
 
     <div class="d-flex justify-content-between mt-4 gap-2">

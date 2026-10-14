@@ -1,39 +1,30 @@
-<?php
-declare(strict_types=1);
+    <?php
+    declare(strict_types=1);
 
-namespace MedCare\Core;
+    namespace MedCare\Core;
 
-/**
- * Autenticação e autorização.
- *
- * FASE 1: ainda não existe login real. pacienteAtual() devolve um paciente de
- * demonstração para o fluxo de agendamento funcionar de ponta a ponta.
- * FASE 4: troca-se pelo usuário vindo de $_SESSION['usuario'] (AuthService).
- * Os métodos exigir*() já definem o contrato que as páginas protegidas usam.
- */
-final class Auth
-{
-    public static function pacienteAtual(): array
+    final class Auth
     {
-        return $_SESSION['usuario'] ?? [
-            'id'    => 1,
-            'nome'  => 'João da Silva',
-            'email' => 'joao.silva@exemplo.com',
-            'tipo'  => 'paciente',
-            'demo'  => true,
-        ];
-    }
+        public static function pacienteAtual(): ?array
+        {
+            $u = $_SESSION['usuario'] ?? null;
 
-    public static function logado(): bool
-    {
-        return isset($_SESSION['usuario']);
-    }
+            if (is_array($u) && ($u['tipo'] ?? null) === 'paciente') {
+                return $u;
+            }
 
-    /** Fase 4: redireciona para o login se o perfil não bater. */
-    public static function exigir(string $tipo): void
-    {
-        if (!self::logado() || ($_SESSION['usuario']['tipo'] ?? null) !== $tipo) {
-            redirecionar(url('pages/login.php', ['next' => $_SERVER['REQUEST_URI'] ?? '']));
+            return null;
+        }
+
+        public static function logado(): bool
+        {
+            return self::pacienteAtual() !== null;
+        }
+
+        public static function exigir(string $tipo): void
+        {
+            if (!self::logado() || ($_SESSION['usuario']['tipo'] ?? null) !== $tipo) {
+                redirecionar(url('pages/login.php', ['next' => $_SERVER['REQUEST_URI'] ?? '']));
+            }
         }
     }
-}

@@ -1,10 +1,7 @@
-<?php
-declare(strict_types=1);
-
+<?php declare(strict_types=1);
 /**
  * Ponto único de inicialização.
  */
-
 define('ROOT_PATH', dirname(__DIR__));
 
 // Autoload PSR-4 simples para carregar os Repositórios automaticamente
@@ -27,3 +24,4 @@ date_default_timezone_set('America/Sao_Paulo');
 
 // Inicializa a sessão segura do paciente
 \MedCare\Core\Session::iniciar();
+$GLOBALS['medcare_config'] = require ROOT_PATH . '/config/app.php';

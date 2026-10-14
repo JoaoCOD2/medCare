@@ -9,23 +9,56 @@ use MedCare\Core\Container;
 /** Regras do agendamento. A atomicidade da reserva fica no repositório. */
 final class AgendamentoService
 {
-    public function confirmar(int $pacienteId, int $medicoId, string $horarioId, string $tipo): array
-    {
+    public function confirmar(
+        int $pacienteId,
+        int $medicoId,
+        string $horarioId,
+        string $tipo
+    ): array {
         $medico = Container::medicos()->porId($medicoId);
+
         if (!$medico) {
             throw new DomainException('Médico não encontrado.');
         }
 
-        if (!in_array($tipo, ['presencial', 'online'], true)
-            || ($medico['modalidade'] !== 'ambos' && $medico['modalidade'] !== $tipo)) {
-            throw new DomainException('Este médico não atende nesta modalidade.');
+        $atendimento = (string) (
+            $medico['atendimento']
+            ?? $medico['modalidade']
+            ?? ''
+        );
+
+        $tipoPermitido = match ($atendimento) {
+            'ambos' => true,
+            'presencial' => $tipo === 'presencial',
+            'teleconsulta' => $tipo === 'online',
+            default => false,
+        };
+
+        if (
+            !in_array($tipo, ['presencial', 'online'], true)
+            || !$tipoPermitido
+        ) {
+            throw new DomainException(
+                'Este médico não atende nesta modalidade.'
+            );
         }
 
         $horario = Container::horarios()->porId($horarioId);
-        if (!$horario || (int) $horario['medico_id'] !== $medicoId) {
-            throw new DomainException('Horário inválido para este médico.');
+
+        if (
+            !$horario
+            || (int) $horario['medico_id'] !== $medicoId
+        ) {
+            throw new DomainException(
+                'Horário inválido para este médico.'
+            );
         }
 
-        return Container::consultas()->criar($pacienteId, $medicoId, $horarioId, $tipo);
+        return Container::consultas()->criar(
+            $pacienteId,
+            $medicoId,
+            $horarioId,
+            $tipo
+        );
     }
 }
